@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Mp_Security>
+            <version>1.0.0</version>
+        </Mp_Security>
+    </modules>
+    <global>
+        <blocks>
+            <security>
+                <class>Mp_Security_Block</class>
+            </security>
+        </blocks>
+        <helpers>
+            <security>
+                <class>Mp_Security_Helper</class>
+            </security>
+        </helpers>
+        <models>
+            <security>
+                <class>Mp_Security_Model</class>
+                <resourceModel>security_resource</resourceModel>
+            </security>
+            <security_resource>
+                <class>Mp_Security_Model_Resource</class>
+                <entities>
+                    <cleaninput>
+                        <table>mp_security_cleaninput</table>
+                    </cleaninput>
+                </entities>
+            </security_resource>
+        </models>
+        <resources>
+            <security_setup>
+                <setup>
+                    <module>Mp_Security</module>
+                    <class>Mage_Core_Model_Resource_Setup</class>
+                </setup>
+            </security_setup>
+            <security_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </security_write>
+            <security_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </security_read>
+        </resources>
+    </global>
+
+    <admin>
+        <routers>
+            <security>
+                <use>admin</use>
+                <args>
+                    <module>Mp_Security</module>
+                    <frontName>security</frontName>
+                </args>
+            </security>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Mp_Security before="Mage_Adminhtml">Mp_Security_Adminhtml</Mp_Security>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <frontend>
+        <routers>
+            <security>
+                <use>standard</use>
+                <args>
+                    <module>Mp_Security</module>
+                    <frontName>security</frontName>
+                </args>
+            </security>
+        </routers>
+        <layout>
+            <updates>
+                <security module="Mp_Security">
+                    <file>mp/security.xml</file>
+                </security>
+            </updates>
+        </layout>
+    </frontend>
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <security module="Mp_Security">
+                    <file>mp/security.xml</file>
+                </security>
+            </updates>
+        </layout>
+    </adminhtml>
+
+    <default>
+
+    </default>
+</config>

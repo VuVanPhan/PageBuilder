@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<layout version="1.0">
+    <security_cleaninput_index>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+            <action method="setIsHandle"><applied>1</applied></action>
+        </reference>
+        <reference name="content">
+            <block type="security/cleaninput" name="cleaninput" template="mp/security/cleaninput.phtml" />
+        </reference>
+    </security_cleaninput_index>
+</layout>

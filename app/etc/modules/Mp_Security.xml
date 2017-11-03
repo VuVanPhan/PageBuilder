@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Mp_Security>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Mp_Security>
+    </modules>
+</config>
