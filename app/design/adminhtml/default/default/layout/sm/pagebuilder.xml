@@ -21,11 +21,11 @@
 		</reference>
 	</adminhtml_pagebuilder_pagebuilder_edit>
 
-	<adminhtml_pagebuilder_pagebuilder_indexWidget>
+	<adminhtml_pagebuilder_pagebuilder_loadindex>
 		<block type="pagebuilder/adminhtml_pagebuilder_widget" name="pagebuilder_widget" output="toHtml" />
-	</adminhtml_pagebuilder_pagebuilder_indexWidget>
+	</adminhtml_pagebuilder_pagebuilder_loadindex>
 
-	<adminhtml_pagebuilder_pagebuilder_loadOptions>
-		<block name="pagebuilder.wysiwyg_widget.options" type="pageBuilder/adminhtml_pagebuilder_widget_options" output="toHtml" />
-	</adminhtml_pagebuilder_pagebuilder_loadOptions>
+	<adminhtml_pagebuilder_pagebuilder_loadoptions>
+		<block name="pagebuilder.wysiwyg_widget.options" type="pagebuilder/adminhtml_pagebuilder_widget_options" output="toHtml" />
+	</adminhtml_pagebuilder_pagebuilder_loadoptions>
 </layout>

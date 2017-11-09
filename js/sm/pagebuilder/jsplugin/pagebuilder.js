@@ -7,9 +7,9 @@
  */
 "use strict";
 // var $ = jQuery.noConflict();
-var PageBuilder = PageBuilder || {};
-PageBuilder = Class.create();
-PageBuilder.prototype = {
+var Pagebuilder = Pagebuilder || {};
+Pagebuilder = Class.create();
+Pagebuilder.prototype = {
 	form: null,
 	container: null,
 	indexRow: 0,
