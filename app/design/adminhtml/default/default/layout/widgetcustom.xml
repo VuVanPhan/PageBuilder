@@ -31,10 +31,6 @@
         <block type="widgetcustom/adminhtml_widget_grid" name="adminhtml.widget.grid" />
     </adminhtml_widgetcustom_widget_grid>
 
-    <adminhtml_widgetcustom_widget_edit>
-        <block type="widgetcustom/adminhtml_widget_edit" name="adminhtml.widget.edit" />
-    </adminhtml_widgetcustom_widget_edit>
-
     <adminhtml_widgetcustom_widget_loadIndex>
         <block name="widgetcustom_wysiwyg_widget" type="widgetcustom/adminhtml_widget_addwidget" output="toHtml" />
     </adminhtml_widgetcustom_widget_loadIndex>

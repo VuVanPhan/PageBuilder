@@ -112,7 +112,9 @@ class Magestore_Widgetcustom_Block_Adminhtml_Custom_Form_Renderer_Fieldset_Eleme
 
     public function getHtmlId()
     {
-        return $this->getElement()->getId();
+        return 'widgetcustom_content';
+//        return 'mywidgetcontent';
+//        return $this->getElement()->getId();
     }
 
     public function getWidgetButton($visible = true) {

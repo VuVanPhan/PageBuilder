@@ -34,7 +34,7 @@ class Magestore_Widgetcustom_Adminhtml_Widgetcustom_WidgetController extends Mag
      */
     public function _initAction() {
         $this->loadLayout()
-            ->_setActiveMenu("adminhtml/widgetcustom_widget")
+            ->_setActiveMenu("widgetcustom/widget")
             ->_addBreadcrumb(
                 Mage::helper("adminhtml")->__("Widget Manager"),
                 Mage::helper("adminhtml")->__("Widget Manager")
@@ -71,18 +71,7 @@ class Magestore_Widgetcustom_Adminhtml_Widgetcustom_WidgetController extends Mag
                 $model->setData($data);
             }
             Mage::register('widget_data', $model);
-
-            $this->loadLayout();
-            $this->_setActiveMenu('adminhtml/widgetcustom_widget');
-
-            $this->_addBreadcrumb(
-                Mage::helper('adminhtml')->__('Widget Manager'),
-                Mage::helper('adminhtml')->__('Wisget Manager')
-            );
-            $this->_addBreadcrumb(
-                Mage::helper('adminhtml')->__('Widget News'),
-                Mage::helper('adminhtml')->__('Widget News')
-            );
+            $this->_initAction();
 
             if ($model->getId())
                 $this->_title($model->getName());
@@ -90,7 +79,8 @@ class Magestore_Widgetcustom_Adminhtml_Widgetcustom_WidgetController extends Mag
                 $this->_title(Mage::helper('adminhtml')->__('Add New Widget'));
 
             $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
-            $this->_addContent($this->getLayout()->createBlock('widgetcustom/adminhtml_widget_edit'));
+            $this->_addContent($this->getLayout()->createBlock('widgetcustom/adminhtml_widget_edit'))
+                ->_addLeft($this->getLayout()->createBlock('widgetcustom/adminhtml_widget_edit_tabs'));
 
             $this->renderLayout();
         } else {
