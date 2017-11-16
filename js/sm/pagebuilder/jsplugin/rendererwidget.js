@@ -6,6 +6,23 @@
  * Websites: http://www.magentech.com
  -------------------------------------------------------------------------*/
 "use strict;"
+var _Pdm_Widget = function () {
+	this.builder = null;
+	this.callback = {};
+	this.currentCol = null;
+	this.currentWidget = null;
+	this.currentShortcode = '';
+};
+
+var turnoffTinyMCEs = [];
+var getContentTinyMCEs = [];
+var getTinyMCEFields = [];
+var PdmWidget = null;
+var PdmCallBack = {};
+var PdmCurrentCol = null;
+var PdmCurrentWidget = null;
+var PdmCurrentShortcode = "";
+
 
 var _PdmWidgetTools = {
 	getDivHtml: function(id, html) {
@@ -37,11 +54,25 @@ var _PdmWidgetTools = {
 		return max + 10;
 	},*/
 
-	openDialog: function(widgetUrl) {
+	openDialog: function(widgetUrl, objbuilder, callback, col) {
+		var objbuilder 	= (objbuilder != null ? objbuilder : null);
+		var callback	= (callback != null ? callback : null);
+		var col			= (col != null ? col : null);
+		console.log(objbuilder);
+		console.log(callback);
+		console.log(col);
 		if ($('widget_window') && typeof(Windows) != 'undefined') {
 			Windows.focus('widget_window');
 			return;
 		}
+
+		PdmWidget = new _Pdm_Widget();
+		PdmWidget.currentShortcode = "";
+		PdmWidget.currentWidget = null;
+		PdmWidget.builder = objbuilder;
+		PdmWidget.callback['widget'] = callback;
+		PdmWidget.currentCol = col;
+
 		this.dialogWindow = Dialog.info(null, {
 			draggable:true,
 			resizable:false,
@@ -62,6 +93,15 @@ var _PdmWidgetTools = {
 		new Ajax.Updater('modal_dialog_message', widgetUrl, {evalScripts: true});
 	},
 	closeDialog: function(window) {
+		if (turnoffTinyMCEs.length > 0) {
+			for (i = 0; i < turnoffTinyMCEs.length; i++) {
+				if (typeof turnoffTinyMCEs[i] == "function") {
+					turnoffTinyMCEs[i]();
+				}
+			}
+			getContentTinyMCEs = [];
+			getTinyMCEFields = [];
+		}
 		if (!window) {
 			window = this.dialogWindow;
 		}
@@ -193,6 +233,27 @@ _PdmWysiwygWidget.Widget.prototype = {
 		}
 	},
 
+	// Assign widget options values when existing widget selected in WYSIWYG
+	initOptionValue: function(widgetCode) {
+		var widgetCode = (PdmWidget.currentShortcode != null ? PdmWidget.currentShortcode : "");
+		console.log(widgetCode);
+		if (widgetCode.indexOf('{{widget') != -1) {
+			this.optionValues = new Hash({});
+			widgetCode.gsub(/([a-z0-9\_]+)\s*\=\s*[\"]{1}([^\"]+)[\"]{1}/i, function(match){
+				if (match[1] == 'type') {
+					this.widgetEl.value = match[2];
+				} else {
+					this.optionValues.set(match[1], match[2]);
+				}
+			}.bind(this));
+
+			this.loadOptions();
+		} else {
+			jQuery("#widget_options_form > .entry-edit-head").hide();
+			jQuery("#basewidget_fieldset").hide();
+		}
+	},
+
 	loadOptions: function() {
 		if (!this.widgetEl.value) {
 			this.switchOptionsContainer();
@@ -259,7 +320,15 @@ _PdmWysiwygWidget.Widget.prototype = {
 			// var params = Form.serializeElements(formElements);
 			var params = Form.serializeElements(formElements, {hash:true,submit:false});
 			if (typeof tinyMCE != "undefined" && getContentTinyMCEs.length > 0) {
-
+				var field_name = "";
+				for (i = 0; i < getContentTinyMCEs.length; i++) {
+					if (typeof getContentTinyMCEs[i] == "function" && typeof getTinyMCEFields[i] == "function") {
+						field_name = getTinyMCEFields[i];
+						params[field_name] = getContentTinyMCEs[i]();
+					}
+				}
+				getContentTinyMCEs = [];
+				getTinyMCEFields = [];
 			}
 			// if (!this.wysiwygExists()) {
 			// 	params = params + '&as_is=1';
@@ -291,7 +360,11 @@ _PdmWysiwygWidget.Widget.prototype = {
 	},
 
 	updateContent: function(content) {
-		if (this.wysiwygExists()) {
+		console.log(typeof (PdmWidget.callback['widget']));
+		console.log(typeof (PdmWidget.callback['widget']) != "undefined" && typeof (PdmWidget.callback['widget']) == "function");
+		if (typeof (PdmWidget.callback['widget']) != "undefined" && typeof (PdmWidget.callback['widget']) == "function") {
+			PdmWidget.callback['widget'].call(PdmWidget.builder, PdmWidget.currentCol, PdmWidget.currentWidget, content);
+		} else if (this.wysiwygExists()) {
 			this.getWysiwyg().execCommand("mceInsertContent", false, content);
 		} else {
 			var textarea = document.getElementById(this.widgetTargetId);
@@ -417,6 +490,15 @@ _PdmWysiwygWidget.chooser.prototype = {
 	},
 
 	closeDialogWindow: function(dialogWindow) {
+		if (turnoffTinyMCEs.length > 0) {
+			for (i = 0; i < turnoffTinyMCEs.length; i++) {
+				if (typeof turnoffTinyMCEs[i] == "function") {
+					turnoffTinyMCEs[i]();
+				}
+			}
+			getContentTinyMCEs = [];
+			getTinyMCEFields = [];
+		}
 		if (!dialogWindow) {
 			dialogWindow = this.dialogWindow;
 		}

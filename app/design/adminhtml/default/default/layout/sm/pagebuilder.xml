@@ -22,7 +22,7 @@
 	</adminhtml_pagebuilder_pagebuilder_edit>
 
 	<adminhtml_pagebuilder_pagebuilder_loadindex>
-		<block type="pagebuilder/adminhtml_pagebuilder_widget" name="pagebuilder_widget" output="toHtml" />
+		<remove name="footer"/>
 	</adminhtml_pagebuilder_pagebuilder_loadindex>
 
 	<adminhtml_pagebuilder_pagebuilder_loadoptions>

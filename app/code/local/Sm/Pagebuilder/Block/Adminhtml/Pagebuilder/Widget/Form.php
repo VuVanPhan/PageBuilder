@@ -26,7 +26,8 @@ class Sm_Pagebuilder_Block_Adminhtml_Pagebuilder_Widget_Form extends Mage_Adminh
         ));
 
         // Setting custom renderer for content field to remove label column
-        $renderer = $this->getLayout()->createBlock('Sm_Pagebuilder_Block_Adminhtml_Widget_Form_Renderer_Fieldset_Addwidget');
+        $renderer = $this->getLayout()->createBlock('pagebuilder/adminhtml_widget_form_renderer_fieldset_addwidget')
+            ->setTemplate('sm/pagebuilder/widget/form/renderer/fieldset/addwidget.phtml');
         $widgetLists->setRenderer($renderer);
 
         $form->setUseContainer(true);

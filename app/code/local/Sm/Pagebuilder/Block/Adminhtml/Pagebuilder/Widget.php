@@ -27,9 +27,5 @@ class Sm_Pagebuilder_Block_Adminhtml_Pagebuilder_Widget extends Mage_Adminhtml_B
         $this->_formScripts[] = 'pbWidget = new _PdmWysiwygWidget.Widget('
             . '"widget_options_form", "select_widget_type", "widget_options", "'
             . $this->getUrl('*/*/loadOptions') .'", "' . $this->getRequest()->getParam('widget_target_id') . '");';
-
-//        $this->_formScripts[] = 'pbWidget = new _PdmWysiwygWidget.Widget('
-//            . '"widget_options_form", "select_widget_type", "widget_options", "'
-//            . $this->getUrl('*/widget/loadOptions') .'", "' . $this->getRequest()->getParam('widget_target_id') . '");';
     }
 }

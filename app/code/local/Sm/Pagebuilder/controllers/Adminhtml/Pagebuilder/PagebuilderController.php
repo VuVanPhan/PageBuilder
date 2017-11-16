@@ -187,7 +187,7 @@ class Sm_Pagebuilder_Adminhtml_Pagebuilder_PagebuilderController extends Mage_Ad
 					$url = $this->getUrl('*/*/edit', array(
 						'id' => $model->getPageId(),
 						'_current' => true,
-//						'activeTab' => $this->getRequest()->getParam('activeTab')
+						'activeTab' => $this->getRequest()->getParam('activeTab')
 					));
 					$this->getResponse()->setBody($url);
 					return;
@@ -196,20 +196,18 @@ class Sm_Pagebuilder_Adminhtml_Pagebuilder_PagebuilderController extends Mage_Ad
 				$this->getResponse()->setBody($url);
 //				$this->_redirect('*/*/');
 				return;
-			}
-			catch (Mage_Core_Exception $e){
+			} catch (Mage_Core_Exception $e){
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 				$this->getResponse()->setRedirect($this->getUrl('*/*/edit', array('_current'=>true)));
 				$url = $this->getUrl('*/*/edit', array(
 					'id' => $model->getPageId(),
 					'_current' => true,
-//					'activeTab' => $this->getRequest()->getParam('activeTab')
+					'activeTab' => $this->getRequest()->getParam('activeTab')
 				));
 				$this->getResponse()->setBody($url);
 				return;
 				return;
-			}
-			catch (Exception $e)
+			} catch (Exception $e)
 			{
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 				Mage::getSingleton('adminhtml/session')->setFormData($data);

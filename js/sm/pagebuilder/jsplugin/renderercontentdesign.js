@@ -318,8 +318,9 @@
 				// Adding Widget
 			}).on("click", "a.pdm-addWidget", function(){
 				pdm.log("Adding Widget");
-				var url_video = pdm.options.addwidget;
-				console.log(url_video);
+				var parent = $(this).parents('div:eq(1)').attr('id');
+				var url_video = pdm.options.addwidget+parent;
+				// console.log($(this).closest("div[id]"));
 				_PdmWidgetTools.openDialog(url_video);
 				// _PdmMediabrowserUtility.openDialog(url_video, 'browserImagesWindow', null, null, 'SM Camera Slider Insert Files...', null);
 

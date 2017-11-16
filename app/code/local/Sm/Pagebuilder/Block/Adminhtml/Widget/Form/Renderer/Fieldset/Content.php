@@ -25,8 +25,12 @@ class Sm_Pagebuilder_Block_Adminhtml_Widget_Form_Renderer_Fieldset_Content exten
         $this->_element = $element;
         return $this->toHtml();
     }
+    
+    public function getHtmlId() {
+        return $this->getElement()->getId();
+    }
 
     public function getAddWidgetUrl() {
-        return $this->getUrl('adminhtml/pagebuilder_pagebuilder/loadIndex');
+        return $this->getUrl('adminhtml/pagebuilder_pagebuilder/loadIndex').'widget_target_id/';
     }
 }
