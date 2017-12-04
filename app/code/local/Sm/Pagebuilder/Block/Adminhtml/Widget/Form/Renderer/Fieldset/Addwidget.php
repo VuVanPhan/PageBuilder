@@ -24,7 +24,7 @@ class Sm_Pagebuilder_Block_Adminhtml_Widget_Form_Renderer_Fieldset_Addwidget ext
         $this->_element = $element;
         return $this->toHtml();
     }
-
+    
     /**
      * Prepare options for widgets HTML select
      *

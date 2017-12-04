@@ -169,6 +169,10 @@ Pagebuilder.prototype = {
 			});
 		}
 	},
+	getWidgetKey : function () {
+		var d = new Date();
+		return d.getTime();
+	},
 	addLayer: function (a) {
 		var b = this.container.getDimensions();
 		if (!b.width && !b.height) {
@@ -178,7 +182,7 @@ Pagebuilder.prototype = {
 			return;
 		}
 		a.order = this.indexRow + 1;
-		a.serial = this.indexRow + 1;
+		a.serial = a.serial ? a.serial : this.getWidgetKey();
 		this.params[a.serial] = a;
 		var d = this.renderLayerHtml(a);
 		$('pdm-canvas').insertBefore(d, $('add-row-first'));
@@ -189,7 +193,7 @@ Pagebuilder.prototype = {
 	addColumn: function (b, e) {
 		e.parent = b;
 		e.order = this.indexCol+1;
-		e.serial = this.indexCol+1;
+		e.serial = this.getWidgetKey() ? this.getWidgetKey() : this.indexCol+1;
 		e.size = 2;
 		this.params[e.parent]['col'] = e;
 		var f = this.renderColumnHtml(e),
@@ -209,7 +213,6 @@ Pagebuilder.prototype = {
 		return b;
 	},
 	renderColumnHtml: function (e) {
-		console.log(e);
 		var b = new Element("div", {
 			id: this.colId+e.serial,
 			class: this.colClass+ ' ' + this.colDesktopClass+e.size + ' ' + this.colLaptopClass+e.size + ' ' +

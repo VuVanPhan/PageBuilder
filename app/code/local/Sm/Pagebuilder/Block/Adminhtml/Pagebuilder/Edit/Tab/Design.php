@@ -61,8 +61,9 @@ class Sm_Pagebuilder_Block_Adminhtml_Pagebuilder_Edit_Tab_Design extends Mage_Ad
 				'title'     => Mage::helper('pagebuilder')->__('Use '.$builder_type_label.' Layout'),
 				'name'      => 'backup_layout',
 				'required'  => false,
-				'values'   => $this->getBackupLayout(),
-				'disabled'  => $isElementDisabled
+				'values'  	=> $this->getBackupLayout(),
+				'disabled'  => $isElementDisabled,
+				'onchange'	=> 'changeLayoutScript();'
 			));
 		}
 

@@ -58,9 +58,7 @@ var _PdmWidgetTools = {
 		var objbuilder 	= (objbuilder != null ? objbuilder : null);
 		var callback	= (callback != null ? callback : null);
 		var col			= (col != null ? col : null);
-		console.log(objbuilder);
-		console.log(callback);
-		console.log(col);
+
 		if ($('widget_window') && typeof(Windows) != 'undefined') {
 			Windows.focus('widget_window');
 			return;
@@ -137,7 +135,8 @@ _PdmWysiwygWidget.Widget.prototype = {
 			Event.observe(this.widgetEl, "change", this.loadOptions.bind(this));
 		}
 
-		this.initOptionValues();
+		console.log('init');
+		this.initOptionValue();
 	},
 
 	buildWidgetForm: function(widgetEl) {
@@ -210,11 +209,9 @@ _PdmWysiwygWidget.Widget.prototype = {
 
 	// Assign widget options values when existing widget selected in WYSIWYG
 	initOptionValues: function() {
-
 		if (!this.wysiwygExists()) {
 			return false;
 		}
-
 		var e = this.getWysiwygNode();
 		if (e != undefined && e.id) {
 			var widgetCode = Base64.idDecode(e.id);
@@ -236,7 +233,6 @@ _PdmWysiwygWidget.Widget.prototype = {
 	// Assign widget options values when existing widget selected in WYSIWYG
 	initOptionValue: function(widgetCode) {
 		var widgetCode = (PdmWidget.currentShortcode != null ? PdmWidget.currentShortcode : "");
-		console.log(widgetCode);
 		if (widgetCode.indexOf('{{widget') != -1) {
 			this.optionValues = new Hash({});
 			widgetCode.gsub(/([a-z0-9\_]+)\s*\=\s*[\"]{1}([^\"]+)[\"]{1}/i, function(match){
@@ -249,8 +245,8 @@ _PdmWysiwygWidget.Widget.prototype = {
 
 			this.loadOptions();
 		} else {
-			jQuery("#widget_options_form > .entry-edit-head").hide();
-			jQuery("#basewidget_fieldset").hide();
+			jQuery("#widget_options_form > .entry-edit-head").show();
+			jQuery("#basewidget_fieldset").show();
 		}
 	},
 
@@ -304,7 +300,6 @@ _PdmWysiwygWidget.Widget.prototype = {
 	},
 
 	insertWidget: function() {
-		console.log('dfdf');
 		widgetOptionsForm = new varienForm(this.formEl);
 		if(widgetOptionsForm.validator && widgetOptionsForm.validator.validate() || !widgetOptionsForm.validator){
 			var formElements = [];
@@ -526,3 +521,16 @@ _PdmWysiwygWidget.chooser.prototype = {
 		this.getElementLabel().innerHTML = value;
 	}
 };
+
+/*get widget type from shortcode*/
+function getWidgetTypeByShortcode(short_code) {
+	var widgetType = "";
+	if (short_code.indexOf('{{widget') != -1) {
+		short_code.gsub(/([a-z0-9\_]+)\s*\=\s*[\"]{1}([^\"]+)[\"]{1}/i, function(match){
+			if (match[1] == 'type') {
+				widgetType = match[2];
+			}
+		});
+	}
+	return widgetType;
+}

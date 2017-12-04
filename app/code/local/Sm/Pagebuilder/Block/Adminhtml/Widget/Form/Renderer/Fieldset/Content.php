@@ -12,6 +12,10 @@ class Sm_Pagebuilder_Block_Adminhtml_Widget_Form_Renderer_Fieldset_Content exten
 
     protected function _construct()
     {
+        $widgets_info = Mage::getModel('widget/widget')->getWidgetsArray();
+        $widgets_json = $widgets_info?Zend_Json::encode( $widgets_info ): "";
+        $widgets_json = str_replace( array('\n','\r','\t') ,"", $widgets_json);
+        $this->assign("widgets_json", $widgets_json);
         $this->setTemplate('sm/pagebuilder/widget/form/renderer/fieldset/content.phtml');
     }
 

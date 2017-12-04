@@ -11,6 +11,22 @@
 	<tr>
 		<td colspan="3" class="value">
 			<div class="container sm-pagebuilder">
+				<script type="text/javascript">
+					/*function get all widgets information*/
+					function getWidgetsInfo(widget_type) {
+						var $widgets = jQuery.parseJSON('<?php echo isset($widgets_json)?$widgets_json:''; ?>');
+						var $widget = null;
+						if(widget_type != "" && $widgets) {
+							$widgets.each(function(el){
+								if(el.type == widget_type) {
+									$widget = el;
+									return;
+								}
+							})
+						}
+						return $widget;
+					}
+				</script>
 				<div id="mypagebuilder">
 					<div id="add-row-first" class="add-row-first">
 						<a title="New Row" class="pdm-addRow pull-center"><span class="fa fa-bars"></span>&nbsp;</a>

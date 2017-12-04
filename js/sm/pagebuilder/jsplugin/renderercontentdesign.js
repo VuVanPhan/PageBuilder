@@ -318,11 +318,10 @@
 				// Adding Widget
 			}).on("click", "a.pdm-addWidget", function(){
 				pdm.log("Adding Widget");
-				var parent = $(this).parents('div:eq(1)').attr('id');
-				var url_video = pdm.options.addwidget+parent;
+				var idParent 	= $(this).parents('div:eq(1)').attr('id');
+				var url_video 	= pdm.options.addwidget+idParent;
 				// console.log($(this).closest("div[id]"));
-				_PdmWidgetTools.openDialog(url_video);
-				// _PdmMediabrowserUtility.openDialog(url_video, 'browserImagesWindow', null, null, 'SM Camera Slider Insert Files...', null);
+				_PdmWidgetTools.openDialog(url_video, $(this).parents('div:eq(1)'), pdm.buildWidgetItem() ,pdm.toolFactory(pdm.options.colButtonsPrepend));
 
 				// Edit Column
 			}).on("click", "a.pdm-colSettings", function(){
@@ -353,6 +352,72 @@
 				e.preventDefault();
 			});
 		};
+		
+		pdm.buildWidgetItem = function (col, widget, content) {
+			var widget = ( widget != null ? widget : '' );
+			var name = '';
+			var wkey = pdm.getWidgetKey();
+			var dw = new PG_DataWidget();
+			dw.wkey = wkey;
+			dw.shortcode = content;
+			if(widget) {
+				var $w = widget;
+				wkey = widget.data("wgcfg").wkey;
+				dw = widget.data("wgcfg");
+				dw.settings = (typeof(widget.data("wgcfg").settings) !== "undefined")?widget.data("wgcfg").settings:'';
+				dw.wkey = wkey;
+				dw.shortcode = content;
+			} else {
+				var $w = $( '<div class="pd-ijwidget" id="widget'+dw.wkey+'"></div>' );
+			}
+			$w.data( 'wgcfg', dw );
+
+			// $w.html(  buildWidgetHtml(content) );
+            //
+			// $w.append('<div class="pd-wedit-shortcode ptstooltip" data-toggle="tooltip" data-placement="top" title="Edit Short Code"></div>');
+			// $w.append('<div class="pd-wsetting ptstooltip" data-toggle="tooltip" data-placement="top" title="Settings"></div>');
+			// $w.append('<div class="pd-wcopy ptstooltip" data-toggle="tooltip" data-placement="top" title="Duplicate"></div>');
+			// $w.append('<div class="pd-wedit ptstooltip" data-toggle="tooltip" data-placement="top" title="Edit"></div>');
+			// $w.append('<div class="pd-wdelete ptstooltip" data-toggle="tooltip" data-placement="top" title="Delete"></div>');
+			// $w.append( '<textarea class="pd-cfginput" id="wpowidget'+wkey+'" name="wpowidget['+wkey+'][config]"></textarea>' );
+			// // alert(  $w.name );
+            //
+			// $( ".pd-wcopy", $w ).click( function(){
+			// 	$wpowidget.cloneWidget(  $w, col );
+			// } );
+            //
+			// $( ".pd-wedit", $w ).click( function(){
+			// 	$wpowidget.editWidget( $w );
+			// } );
+            //
+			// $( ".pd-wedit-shortcode", $w ).click( function(){
+			// 	$wpowidget.editShortcode( $w );
+			// } );
+            //
+			// $( ".pd-wsetting", $w ).click( function(){
+			// 	$wpowidget.settingWidget( $w );
+			// } );
+            //
+			// $( ".pd-wdelete", $w ).click( function(){
+			// 	if( confirm(config.confirmdel) ){
+			// 		$w.remove();
+			// 	}
+            //
+			// } );
+            //
+			// if($('#widget'+dw.wkey).length > 0) {
+			// 	$('#widget'+dw.wkey).replaceWith( $w );
+			// } else {
+			// 	$(col).find( ".pd-content" ).append( $w );
+			// }
+			
+			return wkey;
+		};
+
+		pdm.getWidgetKey = function () {
+			var d = new Date();
+			return d.getTime();
+		};
 
 		/**
 		 * Basically just turns [2,4,6] into 2-4-6
@@ -382,7 +447,6 @@
 				canvas.prepend(pdm.createRow(colWidths));
 				pdm.reset();
 				e.preventDefault();
-
 			});
 		};
 
@@ -1359,3 +1423,63 @@
 		return regex.test(jQuery(elem)[attr.method](attr.property));
 	};
 })(jQuery);
+
+var PG_DataWidget = function () {
+	this.cls = '';
+	this.incls   = '';
+	this.css   = '';
+	this.bgcolor = '';
+	this.bgimage = '';
+	this.bgrepeat = '';
+	this.bgposition = '';
+	this.bgattachment = '';
+	this.padding = '';
+	this.margin = '';
+	this.sfxcls = '';
+	this.sfxa = '';
+	this.sfxaduration = '';
+	this.sfxadelay = '';
+	this.sfxaoffset = '';
+	this.sfxaiteration = '';
+	this.wtype = '';
+	this.wkey ='';
+	this.shortcode = '';
+	this.settings = '';
+	this.widget = '';
+	this.isajax = 0;
+	this.desktop = 1;
+	this.tablet = 1;
+	this.mobile = 1;
+	this.name = '';
+
+};
+
+function buildWidgetHtml(shortcode) {
+	var $widget_type = getWidgetTypeByShortcode(shortcode);
+	var $html = "";
+	var $widget_info = null;
+	if($widget_type != "") {
+		$widget_info = getWidgetsInfo( $widget_type );
+		var widget_group = "other";
+		var widget_code = $widget_type.replace("/","_");
+		var widget_icon = "other";
+		var widget_title = $widget_type.replace("/"," - ");
+		var widget_description = "";
+		if($widget_info != null && $widget_info != "") {
+			widget_group = $widget_info.group;
+			widget_code = $widget_info.code;
+			widget_icon = $widget_info.icon;
+			widget_title = $widget_info.title;
+			widget_description = $widget_info.description;
+		}
+
+		$html = '<div class="pd-wg-button" data-group="'+ widget_group +'">';
+		$html += '<div data-widget="'+ widget_code + '" id="wpo_'+ widget_code + '">';
+		$html += '<div class="pd-wicon pd-icon-'+ widget_icon + '"></div>';
+		$html += '<div class="widget-title">'+ widget_title + '</div>';
+		$html += '<i class="widget-desc">'+ widget_description + '</i>';
+		$html += '</div>';
+		$html += '</div>';
+	}
+	return $html !="" ? $html:shortcode;
+}
