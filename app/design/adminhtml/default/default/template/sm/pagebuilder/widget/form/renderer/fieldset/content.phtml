@@ -11,6 +11,34 @@
 	<tr>
 		<td colspan="3" class="value">
 			<div class="container sm-pagebuilder">
+				
+				<div role="tabpanel" id="blockmodule-tab">
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="blockmodule">
+							<div class="module-group" id="contentblockmodule">
+								<div class="layout-builder-wrapper">
+									<div id="layout-builder" class="layout-builder"></div>
+									<div class="hidden-block"><textarea name="params" id="layout_html" class="textarea hidden-content-layout hide" style="width: 400px; height: 200px"><?php echo $params; ?></textarea></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<br/>
+				<div style="display:none" id="backup_layout_profiles">
+					<?php
+					if($backup_params) {
+						foreach($backup_params as $key=>$val) {
+							?>
+							<textarea name="<?php echo $key; ?>_params" id="<?php echo $key; ?>_params" class="textarea hide backup_params" style="width: 400px; height: 200px"><?php echo $val; ?></textarea>
+							<?php
+						}
+					}
+					?>
+					<textarea name="default_params" id="default_params" class="textarea hide backup_params" style="width: 400px; height: 200px"><?php echo $params; ?></textarea>
+				</div>
+				
 				<script type="text/javascript">
 					/*function get all widgets information*/
 					function getWidgetsInfo(widget_type) {

@@ -63,7 +63,7 @@ class Sm_Pagebuilder_Block_Adminhtml_Pagebuilder_Edit_Tab_Design extends Mage_Ad
 				'required'  => false,
 				'values'  	=> $this->getBackupLayout(),
 				'disabled'  => $isElementDisabled,
-				'onchange'	=> 'changeLayoutScript();'
+				'onchange'	=> 'changeLayoutScript(this);'
 			));
 		}
 
@@ -107,10 +107,10 @@ class Sm_Pagebuilder_Block_Adminhtml_Pagebuilder_Edit_Tab_Design extends Mage_Ad
 		{
 			foreach($collection as $c)
 			{
-				$page_id = $c['page_id'];
+				$pageCode = $c['page_code'];
 				$title = $c['title'];
 				$array[] = array(
-					'value'			=>	$page_id,
+					'value'			=>	$pageCode,
 					'label'     	=>	Mage::helper('pagebuilder')->__($title),
 				);
 			}

@@ -17,7 +17,8 @@
 	<adminhtml_pagebuilder_pagebuilder_edit>
 		<update handle="editor" />
 		<reference name="content">
-			<block type="pagebuilder/adminhtml_widget_edit" name="adminhtml.widget.edit" />
+			<block after="-" type="pagebuilder/adminhtml_pagebuilder_edit_initform" name='adminhtml.pagebuilder.edit.initform' template="sm/pagebuilder/edit/initform.phtml"></block>
+			<!--<block type="pagebuilder/adminhtml_widget_edit" name="adminhtml.widget.edit"></block>-->
 		</reference>
 	</adminhtml_pagebuilder_pagebuilder_edit>
 

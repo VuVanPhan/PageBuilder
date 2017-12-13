@@ -1413,13 +1413,6 @@ i.fa
 	-moz-border-radius: 10%;
 }
 
-#pagebuilder_widget_form li.pdm-wg-button > div.pdm-wg-content
-{
-	position: relative;
-	height: 100%;
-}
-
-#pagebuilder_widget_form li.widget-title
-{
-	text-transform: capitalize;
-}
+#pagebuilder_widget_form li.pdm-wg-button > div.pdm-wg-content { position: relative; height: 100%; }
+#pagebuilder_widget_form li.widget-title { text-transform: capitalize; }
+.hide { display: none; }

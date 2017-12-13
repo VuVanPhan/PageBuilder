@@ -15,14 +15,9 @@ class Sm_Pagebuilder_Block_Adminhtml_Pagebuilder_Edit extends Mage_Adminhtml_Blo
 		$this->_controller  = 'adminhtml_pagebuilder';
 		$this->_form       = 'edit';
 		$page = Mage::registry('page');
-
+		
 		$this->_formScripts[]   = "editForm = new varienForm('edit_form', '');";
 		$this->_formScripts[] = "var PG = new Pagebuilder(editForm);";
-		$this->_formScripts[] = "
-			function changeLayoutScript() {
-				alert('dfdfdf');
-			}
-		";
 
 		if(is_array($page->getParams()))
 		{

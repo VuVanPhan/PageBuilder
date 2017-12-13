@@ -1,0 +1,28 @@
+<?php
+//	$urlwidgets     = Mage::helper("pagebuilder")->getListWidgetsUrl("layout_html");
+//	$urlwidget      = Mage::helper("pagebuilder")->getWidgetFormUrl();
+//	$urlwidgetdata  = Mage::helper("pagebuilder")->getWidgetDataUrl();
+	$page_data      = $this->getPageData();
+	$placeholder    = "";
+?>
+<script type="text/javascript">
+    function changeLayoutScript(e) {
+        if (jQuery(e).length > 0) {
+            var pageCode = jQuery(e).val();
+            var jsonParams = jQuery('#'+pageCode+'_params').val();
+            if (pageCode && (jQuery('#'+pageCode+'_params').length > 0)) {
+                jQuery('#mypagebuilder').each( function(){
+                    var config = {
+//                        urlwidgets: '<?php //echo str_replace("&amp;","&", $urlwidgets);?>//',
+//                        urlwidget: '<?php //echo str_replace("&amp;","&", $urlwidget);?>//',
+//                        urlwidgetdata: '<?php //echo str_replace("&amp;","&", $urlwidgetdata);?>//',
+                        imageurl: '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA); ?>',
+                        placeholder: '<?php echo $placeholder; ?>'
+                    };
+                    jQuery('#'+jQuery.pagedesignmanager.defaultOptions.canvasId+'', this).html('');
+                    jQuery( jQuery('#'+jQuery.pagedesignmanager.defaultOptions.canvasId+'', this) ).PB_Layout(config, jsonParams);
+                });
+            }
+        }
+    }
+</script>

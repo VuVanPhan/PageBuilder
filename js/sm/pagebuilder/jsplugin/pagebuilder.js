@@ -163,8 +163,8 @@ Pagebuilder.prototype = {
 				method: "post",
 				parameters: d,
 				onSuccess: function(b) {
-					// if (a) window.location.href = b.responseText;
-					// else if (0 === b.responseText.indexOf("http://")) window.location.href = b.responseText;
+					if (a) window.location.href = b.responseText;
+					else if (0 === b.responseText.indexOf("http://")) window.location.href = b.responseText;
 				}
 			});
 		}
@@ -174,6 +174,7 @@ Pagebuilder.prototype = {
 		return d.getTime();
 	},
 	addLayer: function (a) {
+		console.log(a);
 		var b = this.container.getDimensions();
 		if (!b.width && !b.height) {
 			setTimeout(function() {
@@ -198,7 +199,7 @@ Pagebuilder.prototype = {
 		this.params[e.parent]['col'] = e;
 		var f = this.renderColumnHtml(e),
 			id = this.rowId.concat(b),
-			pdmTools = jQuery('.pdm-tools', jQuery('#'+id+''));
+			pdmTools = jQuery('.'+this.pdmToolClass+'', jQuery('#'+id+''));
 		pdmTools.after(f);
 		this.indexCol++;
 	},
@@ -251,3 +252,47 @@ Pagebuilder.prototype = {
 		return buttons.join("");
 	}
 };
+
+(function($) {
+	/**
+	 * PB_Layout Plugin
+	 */
+	$.fn.PB_Layout = function (opts, datajson) {
+		var builder = new Pagebuilder();
+
+		function init(a) {
+			builder.addLayer(a);
+		}
+
+		/**
+		 * add suggest row using to click to this for adding new real row
+		 */
+		function addSuggestRow(){
+			var divAddRow 		= document.createElement('div');
+			var innerDiv 		= document.createElement('a');
+			var innerA 			= document.createElement('span');
+			divAddRow.setAttribute("id", "add-row-first");
+			divAddRow.setAttribute("class", "add-row-first");
+			innerDiv.setAttribute("class", "pdm-addRow pull-center");
+			innerDiv.setAttribute("title", "New Row");
+			innerA.setAttribute("class", "fa fa-bars");
+			innerDiv.append(innerA);
+			innerDiv.insert("&nbsp;");
+			divAddRow.append(innerDiv);
+			$('#pdm-canvas').append(divAddRow);
+		}
+
+		/**
+		 * initialize every element
+		 */
+		this.each(function() {
+			var json = JSON.parse(datajson);
+			for(var j in json)
+				init(json[j]);
+
+			addSuggestRow();
+		});
+
+		return this;
+	};
+})(jQuery);
