@@ -15,6 +15,7 @@ Pagebuilder.prototype = {
 	indexRow: 0,
 	indexCol: 0,
 	params: {},
+	paramsChild: {},
 	settings: {},
 	settingsParams: "custom_css|custom_js|enable_wrapper|select_wrapper|wrapper_class|template_settings".split("|"),
 	configParams: "custom_css|custom_js|enable_wrapper|select_wrapper|wrapper_class|template_settings".split("|"),
@@ -31,7 +32,7 @@ Pagebuilder.prototype = {
 	pdmClearClass: "clearfix",
 
 	// Id row widget
-	rowId: "pb-layer-",
+	rowId: "pdm-layer-",
 
 	// Buttons at the top of each row
 	rowButtonsPrepend: [
@@ -106,7 +107,7 @@ Pagebuilder.prototype = {
 	colAdditionalClass: "",
 
 	// Id cols widget
-	colId : 'pb-col-',
+	colId : 'pdm-col-',
 
 	// Buttons to prepend to each column
 	colButtonsPrepend: [
@@ -147,7 +148,6 @@ Pagebuilder.prototype = {
 			var b = this.form.validator.form;
 			var c = b.action;
 			var d = b.serialize(true);
-
 			this.settings['custom_css'] = d.custom_css;
 			this.settings['custom_js'] = d.custom_js;
 			this.settings['wrapper_page'] = d.wrapper_page;
@@ -158,13 +158,13 @@ Pagebuilder.prototype = {
 
 			d.settings = JSON.stringify(this.settings);
 			d.params = JSON.stringify(this.params);
-			console.log(d);
+			console.log(d.params);
 			new Ajax.Request(c, {
 				method: "post",
 				parameters: d,
 				onSuccess: function(b) {
-					if (a) window.location.href = b.responseText;
-					else if (0 === b.responseText.indexOf("http://")) window.location.href = b.responseText;
+					// if (a) window.location.href = b.responseText;
+					// else if (0 === b.responseText.indexOf("http://")) window.location.href = b.responseText;
 				}
 			});
 		}
@@ -173,8 +173,16 @@ Pagebuilder.prototype = {
 		var d = new Date();
 		return d.getTime();
 	},
+	loadWidgets : function (widgetUrl, objbuilder, callback, col) {
+		var widgetUrl 	= widgetUrl != null ? widgetUrl : "";
+		var objbuilder	= objbuilder != null ? objbuilder : "";
+		var callback 	= callback != null ? callback : "";
+		var col 		= col != null ? col : "";
+
+
+		_PdmWidgetTools.openDialog(widgetUrl, objbuilder, callback, col);
+	},
 	addLayer: function (a) {
-		console.log(a);
 		var b = this.container.getDimensions();
 		if (!b.width && !b.height) {
 			setTimeout(function() {
@@ -189,17 +197,23 @@ Pagebuilder.prototype = {
 		$('pdm-canvas').insertBefore(d, $('add-row-first'));
 		if (a.col)
 			this.addColumn(a.serial, a.col);
+
 		this.indexRow++;
 	},
 	addColumn: function (b, e) {
 		e.parent = b;
 		e.order = this.indexCol+1;
-		e.serial = this.getWidgetKey() ? this.getWidgetKey() : this.indexCol+1;
+		console.log(e);
+		console.log(e.key);
+		e.serial = e.serial ? e.serial : this.getWidgetKey() ? this.getWidgetKey() : this.indexCol+1;
+		console.log(e.serial);
 		e.size = 2;
-		this.params[e.parent]['col'] = e;
+		this.paramsChild[e.serial] = e;
+		// console.log(this.paramsChild);
+		this.params[e.parent]['col'] = this.paramsChild;
 		var f = this.renderColumnHtml(e),
 			id = this.rowId.concat(b),
-			pdmTools = jQuery('.'+this.pdmToolClass+'', jQuery('#'+id+''));
+			pdmTools = jQuery('.'+this.pdmToolClass+'', jQuery('#'+id+''))[0];
 		pdmTools.after(f);
 		this.indexCol++;
 	},
@@ -216,8 +230,8 @@ Pagebuilder.prototype = {
 	renderColumnHtml: function (e) {
 		var b = new Element("div", {
 			id: this.colId+e.serial,
-			class: this.colClass+ ' ' + this.colDesktopClass+e.size + ' ' + this.colLaptopClass+e.size + ' ' +
-			this.colTabletClass+e.size + ' ' + this.colPhoneClass+e.size + ' ' + this.pdmEditClass + ' ' + this.colAdditionalClass
+			class: this.colClass + ' ' + this.colDesktopClass + e.size + ' ' + this.colLaptopClass + e.size + ' ' +
+			this.colTabletClass + e.size + ' ' + this.colPhoneClass + e.size + ' ' + this.pdmEditClass + ' ' + this.colAdditionalClass
 		});
 
 		b.insert(this.toolFactory(this.colButtonsPrepend));

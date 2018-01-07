@@ -24,8 +24,8 @@
 	border-right: solid 1px #2fa4e7;
 	border-bottom: solid 1px #2fa4e7;
 	min-height: 50px;
-	background-color: none;
-	margin: 24px 0;
+	background-color: transparent;
+	margin: 28px 0;
 }
 
 #pdm-canvas .pdm-editing-selected {
@@ -102,7 +102,7 @@
 }
 
 #pdm-canvas .pdm-tools {
-	background-color: none;
+	background-color: transparent;
 	min-height: 30px;
 	display: block;
 	clear: both;
@@ -111,26 +111,37 @@
 	margin-top: -30px;
 }
 
-#pdm-canvas .pdm-tools > a > span
+#pdm-canvas .pdm-tools-widget {
+	background-color: transparent;
+	min-height: 30px;
+	display: block;
+	right: 0;
+	top: 0;
+	position: absolute;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+#pdm-canvas .pdm-tools > a > span, #pdm-canvas .pdm-tools-widget > a > span
 {
 	visibility: hidden;
 }
 
-#pdm-canvas .pdm-tools a {
+#pdm-canvas .pdm-tools a, #pdm-canvas .pdm-tools-widget a {
 	color: #1a99e2;
 	font-size: 14px;
 	padding: 5px 5px 5px 8px;
 	/*float: left;*/
 	cursor: pointer;
-	background-color: none;
+	background-color: transparent;
 }
 
-#pdm-canvas .row.pdm-editing:hover .pdm-tools > a > span
+#pdm-canvas .row.pdm-editing:hover .pdm-tools > a > span, #pdm-canvas .row.pdm-editing:hover .pdm-tools-widget > a > span
 {
 	visibility: visible;
 }
 
-#pdm-canvas .pdm-tools a:hover {
+#pdm-canvas .pdm-tools a:hover, #pdm-canvas .pdm-tools-widget a:hover {
 	background-color: #2fa4e7;
 	color: #fff;
 	text-decoration: none;
@@ -142,7 +153,9 @@
 }
 
 #pdm-canvas .pdm-tools .pdm-removeRow:hover,
-#pdm-canvas .pdm-tools .pdm-removeCol:hover {
+#pdm-canvas .pdm-tools .pdm-removeCol:hover,
+#pdm-canvas .pdm-tools-widget .pdm-removeRow:hover,
+#pdm-canvas .pdm-tools-widget .pdm-removeCol:hover {
 	background-color: #c00;
 	color: #fff;
 }
@@ -154,7 +167,7 @@
 
 #pdm-canvas .row.pdm-editing,
 #pdm-canvas .row-fluid.pdm-editing {
-	background-color: none;
+	background-color: transparent;
 	margin: 25px 0;
 	padding: 0 5px 0 5px;
 	-webkit-border-top-right-radius: 5px;
@@ -184,7 +197,7 @@
 
 #pdm-canvas .row.pdm-editing>.pdm-tools,
 #pdm-canvas .row-fluid.pdm-editing>.pdm-tools {
-	background-color: none;
+	background-color: transparent;
 	margin-right: 0;
 	margin-left: 0;
 	margin-top: -30px;
@@ -193,7 +206,7 @@
 #pdm-canvas .row.pdm-editing>.pdm-tools a,
 #pdm-canvas .row-fluid.pdm-editing>.pdm-tools a {
 	color: #666;
-	background-color: none;
+	background-color: transparent;
 	font-size: 15px;
 }
 

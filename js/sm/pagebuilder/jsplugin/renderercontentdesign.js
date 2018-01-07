@@ -283,6 +283,7 @@
 				var a = {};
 				var parent = $(this).parent().parent()[0];
 				var row = parent.getAttribute('row');
+				console.log(row);
 				PG.addColumn(row, a);
 
 				// Add a nested row
@@ -312,21 +313,29 @@
 
 				// Duplicate Row
 			}).on("click", "a.pdm-duplicate", function(){
-				pdm.log("Duplicate Row");
-				alert('Duplicate Row');
+				pdm.log("Duplicate");
+				alert('Duplicate');
 
 				// Adding Widget
 			}).on("click", "a.pdm-addWidget", function(){
 				pdm.log("Adding Widget");
 				var idParent 	= $(this).parents('div:eq(1)').attr('id');
 				var url_video 	= pdm.options.addwidget+idParent;
-				// console.log($(this).closest("div[id]"));
-				_PdmWidgetTools.openDialog(url_video, $(this).parents('div:eq(1)'), pdm.buildWidgetItem() ,pdm.toolFactory(pdm.options.colButtonsPrepend));
+				console.log($(this).parents('div:eq(1)'));
+				console.log(buildWidgetItem);
+				console.log(pdm.toolFactory(pdm.options.colButtonsPrepend));
+				// pdm.loadWidgets(url_video, $(this).parents('div:eq(1)'), buildWidgetItem, $(this).parents('div:eq(1)'));
+				PG.loadWidgets(url_video, $(this).parents('div:eq(1)'), buildWidgetItem, $(this).parents('div:eq(1)'));
 
 				// Edit Column
 			}).on("click", "a.pdm-colSettings", function(){
 				pdm.log("Edit Column");
 				alert('Edit Column');
+
+				// Remove a col
+			}).on("click", "a.pdm-settings", function(){
+				pdm.log("Edit");
+				alert('Edit');
 
 				// Remove a col
 			}).on("click", "a.pdm-removeCol", function(){
@@ -346,77 +355,21 @@
 
 				// For all the above, prevent default.
 			}).on("click", "a.pdm-removeRow, button.pdm-preview, a.pdm-addColumn", function(e){
-				pdm.log("Clicked: "   + $.grep((this).className.split(" "), function(v){
-					return v.indexOf('pdm-') === 0;
-				}).join());
-				e.preventDefault();
+				// pdm.log("Clicked: "   + $.grep((this).className.split(" "), function(v){
+				// 	return v.indexOf('pdm-') === 0;
+				// }).join());
+				// e.preventDefault();
 			});
 		};
 		
-		pdm.buildWidgetItem = function (col, widget, content) {
-			var widget = ( widget != null ? widget : '' );
-			var name = '';
-			var wkey = pdm.getWidgetKey();
-			var dw = new PG_DataWidget();
-			dw.wkey = wkey;
-			dw.shortcode = content;
-			if(widget) {
-				var $w = widget;
-				wkey = widget.data("wgcfg").wkey;
-				dw = widget.data("wgcfg");
-				dw.settings = (typeof(widget.data("wgcfg").settings) !== "undefined")?widget.data("wgcfg").settings:'';
-				dw.wkey = wkey;
-				dw.shortcode = content;
-			} else {
-				var $w = $( '<div class="pd-ijwidget" id="widget'+dw.wkey+'"></div>' );
-			}
-			$w.data( 'wgcfg', dw );
+		pdm.loadWidgets = function (widgetUrl, objbuilder, callback, col) {
+			var widgetUrl 	= widgetUrl != null ? widgetUrl : "";
+			var objbuilder	= objbuilder != null ? objbuilder : "";
+			var callback 	= callback != null ? callback : "";
+			var col 		= col != null ? col : "";
 
-			// $w.html(  buildWidgetHtml(content) );
-            //
-			// $w.append('<div class="pd-wedit-shortcode ptstooltip" data-toggle="tooltip" data-placement="top" title="Edit Short Code"></div>');
-			// $w.append('<div class="pd-wsetting ptstooltip" data-toggle="tooltip" data-placement="top" title="Settings"></div>');
-			// $w.append('<div class="pd-wcopy ptstooltip" data-toggle="tooltip" data-placement="top" title="Duplicate"></div>');
-			// $w.append('<div class="pd-wedit ptstooltip" data-toggle="tooltip" data-placement="top" title="Edit"></div>');
-			// $w.append('<div class="pd-wdelete ptstooltip" data-toggle="tooltip" data-placement="top" title="Delete"></div>');
-			// $w.append( '<textarea class="pd-cfginput" id="wpowidget'+wkey+'" name="wpowidget['+wkey+'][config]"></textarea>' );
-			// // alert(  $w.name );
-            //
-			// $( ".pd-wcopy", $w ).click( function(){
-			// 	$wpowidget.cloneWidget(  $w, col );
-			// } );
-            //
-			// $( ".pd-wedit", $w ).click( function(){
-			// 	$wpowidget.editWidget( $w );
-			// } );
-            //
-			// $( ".pd-wedit-shortcode", $w ).click( function(){
-			// 	$wpowidget.editShortcode( $w );
-			// } );
-            //
-			// $( ".pd-wsetting", $w ).click( function(){
-			// 	$wpowidget.settingWidget( $w );
-			// } );
-            //
-			// $( ".pd-wdelete", $w ).click( function(){
-			// 	if( confirm(config.confirmdel) ){
-			// 		$w.remove();
-			// 	}
-            //
-			// } );
-            //
-			// if($('#widget'+dw.wkey).length > 0) {
-			// 	$('#widget'+dw.wkey).replaceWith( $w );
-			// } else {
-			// 	$(col).find( ".pd-content" ).append( $w );
-			// }
-			
-			return wkey;
-		};
 
-		pdm.getWidgetKey = function () {
-			var d = new Date();
-			return d.getTime();
+			_PdmWidgetTools.openDialog(widgetUrl, objbuilder, callback, col);
 		};
 
 		/**
@@ -1139,6 +1092,148 @@
 	};
 
 	/**
+	 * Returns an editing div with appropriate btns as passed in
+	 * @method toolFactory
+	 * @param {array} btns - Array of buttons (see options)
+	 * @return MemberExpression
+	 */
+	function toolFactory(btns){
+		var tools=$("<div/>")
+			.addClass("pdm-tools")
+			.addClass("clearfix")
+			.html(buttonFactory(btns));
+		return tools[0].outerHTML;
+	}
+
+	/**
+	 * Returns an editing div with appropriate btns as passed in
+	 * @method toolFactory
+	 * @param {array} btns - Array of buttons (see options)
+	 * @return MemberExpression
+	 */
+	function toolWidgetFactory(btns){
+		var tools=$("<div/>")
+			.addClass("pdm-tools-widget")
+			.addClass("clearfix")
+			.html(buttonFactory(btns));
+		return tools[0].outerHTML;
+	}
+
+	/**
+	 * Returns html string of buttons
+	 * @method buttonFactory
+	 * @param {array} btns - Array of button configurations (see options)
+	 * @return CallExpression
+	 */
+	function buttonFactory(btns){
+		var buttons=[];
+		$.each(btns, function(i, val){
+			val.btnLabel = (typeof val.btnLabel === 'undefined')? '' : val.btnLabel;
+			val.title = (typeof val.title === 'undefined')? '' : val.title;
+			buttons.push("<" + val.element +" title='" + val.title + "' class='" + val.btnClass + "'><span class='"+val.iconClass+"'></span>&nbsp;" + val.btnLabel + "</" + val.element + "> ");
+		});
+		return buttons.join("");
+	}
+
+	function buildWidgetItem(col, widget, content) {
+		console.log(col);
+		console.log(widget);
+		console.log(content);
+		var widget = ( widget != null ? widget : '' );
+
+		var name = '';
+		var wkey = getWidgetKey();
+		var dw = new PG_DataWidget();
+		dw.wkey = wkey;
+		dw.shortcode = content;
+		if(widget) {
+			var $w = widget;
+			wkey = widget.data("wgcfg").wkey;
+			dw = widget.data("wgcfg");
+			dw.settings = (typeof(widget.data("wgcfg").settings) !== "undefined")?widget.data("wgcfg").settings:'';
+			dw.wkey = wkey;
+			dw.shortcode = content;
+		} else {
+			var $w = $( '<div class="pdm-widget pdm-editing" id="pdm-widget-'+dw.wkey+'" class="" ></div>' );
+		}
+		// $w.data( 'wgcfg', dw );
+
+		$w.html(  buildWidgetHtml(content) );
+		$w.append(toolWidgetFactory([
+			{
+				title:"Remove Column",
+				element: "a",
+				btnClass: "right pdm-removeCol",
+				iconClass: "fa fa-trash-o"
+			},
+			{
+				title:"Duplicate",
+				element: "a",
+				btnClass: "pull-right pdm-duplicate",
+				iconClass: "fa fa-files-o"
+			},
+			{
+				title:"Settings",
+				element: "a",
+				btnClass: "right pdm-settings",
+				iconClass: "fa fa-cog"
+			},
+			{
+				title:"Edit Row Short Code",
+				element: "a",
+				btnClass: "pull-right pdm-editRowShortcode",
+				iconClass: "fa fa-pencil-square-o"
+			}
+		]));
+		//
+		// $w.append('<div class="pd-wedit-shortcode ptstooltip" data-toggle="tooltip" data-placement="top" title="Edit Short Code"></div>');
+		// $w.append('<div class="pd-wsetting ptstooltip" data-toggle="tooltip" data-placement="top" title="Settings"></div>');
+		// $w.append('<div class="pd-wcopy ptstooltip" data-toggle="tooltip" data-placement="top" title="Duplicate"></div>');
+		// $w.append('<div class="pd-wedit ptstooltip" data-toggle="tooltip" data-placement="top" title="Edit"></div>');
+		// $w.append('<div class="pd-wdelete ptstooltip" data-toggle="tooltip" data-placement="top" title="Delete"></div>');
+		// $w.append( '<textarea class="pd-cfginput" id="wpowidget'+wkey+'" name="wpowidget['+wkey+'][config]"></textarea>' );
+
+		// // alert(  $w.name );
+		//
+		// $( ".pd-wcopy", $w ).click( function(){
+		// 	$wpowidget.cloneWidget(  $w, col );
+		// } );
+		//
+		// $( ".pd-wedit", $w ).click( function(){
+		// 	$wpowidget.editWidget( $w );
+		// } );
+		//
+		// $( ".pd-wedit-shortcode", $w ).click( function(){
+		// 	$wpowidget.editShortcode( $w );
+		// } );
+		//
+		// $( ".pd-wsetting", $w ).click( function(){
+		// 	$wpowidget.settingWidget( $w );
+		// } );
+		//
+		// $( ".pd-wdelete", $w ).click( function(){
+		// 	if( confirm(config.confirmdel) ){
+		// 		$w.remove();
+		// 	}
+		//
+		// } );
+		//
+		if($('#widget'+dw.wkey).length > 0) {
+			$('#widget'+dw.wkey).replaceWith( $w );
+		} else {
+			$(col).append( $w );
+			// $(col).find( ".pd-content" ).append( $w );
+		}
+
+		return wkey;
+	}
+
+	function getWidgetKey() {
+		var d = new Date();
+		return d.getTime();
+	}
+
+	/**
 	 Options which can be overridden by the .pagedesignmanager() call on the requesting page
 	 */
 	$.pagedesignmanager.defaultOptions = {
@@ -1212,6 +1307,9 @@
 		 */
 		// Standard edit class, applied to active elements
 		pdmEditClass: "pdm-editing",
+
+		// Standard widget class, applied to addwidget elements
+		pdmWidgetClass: "pdm-widget",
 
 		// Applied to the currently selected element
 		pdmEditClassSelected: "pdm-editing-selected",
@@ -1362,6 +1460,34 @@
 			}
 		],
 
+		// Buttons to prepend to each widget
+		widgetButtonsPrepend: [
+			{
+				title:"Remove Column",
+				element: "a",
+				btnClass: "right pdm-removeCol",
+				iconClass: "fa fa-trash-o"
+			},
+			{
+				title:"Duplicate",
+				element: "a",
+				btnClass: "pull-right pdm-duplicate",
+				iconClass: "fa fa-files-o"
+			},
+			{
+				title:"Settings",
+				element: "a",
+				btnClass: "right pdm-settings",
+				iconClass: "fa fa-cog"
+			},
+			{
+				title:"Edit Row Short Code",
+				element: "a",
+				btnClass: "pull-right pdm-editRowShortcode",
+				iconClass: "fa fa-pencil-square-o"
+			}
+		],
+
 		// Maximum column span value: if you've got a 24 column grid via customised bootstrap, you could set this to 24.
 		colMax: 12,
 
@@ -1473,9 +1599,9 @@ function buildWidgetHtml(shortcode) {
 			widget_description = $widget_info.description;
 		}
 
-		$html = '<div class="pd-wg-button" data-group="'+ widget_group +'">';
-		$html += '<div data-widget="'+ widget_code + '" id="wpo_'+ widget_code + '">';
-		$html += '<div class="pd-wicon pd-icon-'+ widget_icon + '"></div>';
+		$html = '<div class="pdm-wg-button" data-group="'+ widget_group +'">';
+		$html += '<div data-widget="'+ widget_code + '" id="pdm_'+ widget_code + '">';
+		$html += '<div class="pdm-wicon pdm-icon-'+ widget_icon + '"></div>';
 		$html += '<div class="widget-title">'+ widget_title + '</div>';
 		$html += '<i class="widget-desc">'+ widget_description + '</i>';
 		$html += '</div>';

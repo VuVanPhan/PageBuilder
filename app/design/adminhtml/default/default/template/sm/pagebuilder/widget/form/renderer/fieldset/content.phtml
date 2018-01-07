@@ -45,6 +45,7 @@
 						var $widgets = jQuery.parseJSON('<?php echo isset($widgets_json)?$widgets_json:''; ?>');
 						var $widget = null;
 						if(widget_type != "" && $widgets) {
+							console.log($widgets);
 							$widgets.each(function(el){
 								if(el.type == widget_type) {
 									$widget = el;

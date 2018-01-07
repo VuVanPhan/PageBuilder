@@ -27,7 +27,8 @@ class Sm_Pagebuilder_Block_Adminhtml_Widget_Form_Renderer_Fieldset_Content exten
             }
         }
 
-        $widgets_info = Mage::getModel('widget/widget')->getWidgetsArray();
+//        $widgets_info = Mage::getModel('widget/widget')->getWidgetsArray();
+        $widgets_info = Mage::helper('pagebuilder/widget')->getWidgetsArray();
         $widgets_json = $widgets_info?Zend_Json::encode( $widgets_info ): "";
         $widgets_json = str_replace( array('\n','\r','\t') ,"", $widgets_json);
         $this->assign("params", Mage::helper('core')->jsonEncode($params));

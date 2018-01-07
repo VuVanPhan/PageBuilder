@@ -54,11 +54,58 @@ var _PdmWidgetTools = {
 		return max + 10;
 	},*/
 
+	rot13init: function () {
+		var map = new Array();
+		var s = 'abcdefghijklmnopqrstuvwxyz';
+		for (i=0; i<s.length; i++)
+			map[s.charAt(i)] = s.charAt((i+13)%26);
+		for (i=0; i<s.length; i++)
+			map[s.charAt(i).toUpperCase()] = s.charAt((i+13)%26).toUpperCase();
+
+		return map;
+	},
+
+	rot13: function (a) {
+		var rot13map;
+		if (!rot13map)
+			rot13map = this.rot13init();
+		s = "";
+		for (i=0; i<a.length; i++)
+		{
+			var b = a.charAt(i);
+
+			s    += (b>='A' && b<='Z' || b>='a' && b<='z' ? rot13map[b] : b);
+		}
+		return s;
+	},
+
+	convertrot13: function (a) {
+		var rot13map;
+		if (!rot13map)
+			rot13map = this.rot13init();
+		s = "";
+		for (i=0; i<a.length; i++)
+		{
+			var b = a.charAt(i);
+
+			s    += (b>='A' && b<='Z' || b>='a' && b<='z' ? rot13map[b] : b);
+		}
+		return s;
+	},
+
+	redirectToProduct: function () {
+		var encryptedUrl = jQuery('#configure-and-buy-button').attr('data-href');
+		if (encryptedUrl) {
+			window.open(this.rot13(encryptedUrl), '_blank');
+		} else {
+			location.window.reload();
+		}
+	},
+
 	openDialog: function(widgetUrl, objbuilder, callback, col) {
 		var objbuilder 	= (objbuilder != null ? objbuilder : null);
 		var callback	= (callback != null ? callback : null);
 		var col			= (col != null ? col : null);
-
 		if ($('widget_window') && typeof(Windows) != 'undefined') {
 			Windows.focus('widget_window');
 			return;
