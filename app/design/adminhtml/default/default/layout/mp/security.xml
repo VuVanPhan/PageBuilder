@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<layout version="0.1.0">
-    <security_adminhtml_cleaninput_index>
-        <reference name="content">
-            <block type="security/adminhtml_cleaninput" name="cleaninput" />
-        </reference>
-    </security_adminhtml_cleaninput_index>
-</layout>
